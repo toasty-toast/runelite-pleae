@@ -18,7 +18,6 @@ public class PleaePlugin extends Plugin {
     public static final int CYCLES_PER_GAME_TICK = Constants.GAME_TICK_LENGTH / Constants.CLIENT_TICK_LENGTH;
     private static final int CYCLES_FOR_OVERHEAD_TEXT = OVERHEAD_TEXT_TICK_TIMEOUT * CYCLES_PER_GAME_TICK;
 
-
     @Inject
     private Client client;
 
@@ -54,7 +53,12 @@ public class PleaePlugin extends Plugin {
             return;
         }
 
-        client.addChatMessage(ChatMessageType.PUBLICCHAT, player.getName(), "Pleae", null);
+        String deathMessage = getDeathMessage();
+        if (deathMessage == null) {
+            return;
+        }
+
+        client.addChatMessage(ChatMessageType.PUBLICCHAT, player.getName(), deathMessage, null);
     }
 
     private void addOverheadMessage(Player player) {
@@ -68,7 +72,21 @@ public class PleaePlugin extends Plugin {
             return;
         }
 
-        player.setOverheadText("Pleae");
+        String deathMessage = getDeathMessage();
+        if (deathMessage == null) {
+            return;
+        }
+
+        player.setOverheadText(deathMessage);
         player.setOverheadCycle(CYCLES_FOR_OVERHEAD_TEXT);
+    }
+
+    private String getDeathMessage() {
+        if (config.deathMessage() == null) {
+            return null;
+        }
+
+        String configMessage = config.deathMessage().trim();
+        return configMessage.length() == 0 ? null : configMessage;
     }
 }
