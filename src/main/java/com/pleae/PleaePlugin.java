@@ -52,13 +52,17 @@ public class PleaePlugin extends Plugin {
         if (player != client.getLocalPlayer() && !config.chatMessageForOthers()) {
             return;
         }
+        String playerName = player.getName();
+        if (playerName == null) {
+            return;
+        }
 
         String deathMessage = getDeathMessage();
         if (deathMessage == null) {
             return;
         }
 
-        client.addChatMessage(ChatMessageType.PUBLICCHAT, player.getName(), deathMessage, null);
+        client.addChatMessage(ChatMessageType.PUBLICCHAT, playerName, deathMessage, null);
     }
 
     private void addOverheadMessage(Player player) {
